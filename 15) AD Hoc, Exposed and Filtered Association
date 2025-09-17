@@ -1,0 +1,107 @@
+// Association improves the performance comparing Joins
+// Association is nothing is very similar to join
+//Association refers to relationship between entities
+//path expression _b.mara and filter assocation can be there unlike joins where we need where conditions for filter
+//Association[0..1] [min..max] by default [0..1] is the cardinality
+
+// We have three type 1) Ad Hoc Association 2) Exposed association 3) Filtered Association
+
+-----------------------------------------------------------------------------------------------------------------------------
+// AD HOC ASSOCIATION
+
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_VIEW10'
+@EndUserText.label: 'CDS VIEW WITH AD HOC association'
+
+define view ZCDS_DDL_VIEW10 as
+select from mara as A
+association to marc as _B
+on A.matnr = _B.matnr
+{
+  A.matnr,
+  A.aenam,
+  A.bismt,
+  _B.werks,   // AD HOC ASSOCIATION
+  _B.dismm   // AD HOC ASSOCIATION
+}
+
+------------------------------------------------------------------------------------------------------------------------------
+// EXPOSED ASSOCIATION ( on demand join )
+
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_VIEW11'
+@EndUserText.label: 'CDS View with Exposed Association'
+
+define view ZCDS_DDL_VIEW11 
+as select from mara as A
+association to marc as _B
+on A.matnr = _B.matnr
+{
+  A.matnr,
+  A.aenam,
+  A.bismt,
+  _B
+}
+
+
+//Second cds view that access the first using exposed association
+
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_VIEW12'
+@EndUserText.label: 'CDS VIEWS WITH Exposed Association'
+
+define view ZCDS_DDL_VIEW12 as
+select from ZCDS_DDL_VIEW11 as c
+{
+  c.matnr,
+  c.aenam,
+  c._B.dismm,      //Path expression _B (on demand join)
+  c._B.werks
+  
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------
+"report to access cds view with exposed association
+
+*&---------------------------------------------------------------------*
+*& Report zcds_report2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zcds_report2.
+
+
+START-OF-SELECTION.
+
+
+select matnr,
+       aenam,
+       \_b-dismm as dismm,
+       \_B-WERKS AS WERKS
+       from zcds_ddl_view11
+       into table @data(lt_data).
+       
+      "display THE result using SALV
+       
+
+----------------------------------------------------------------------------------------------------------------------------
+//FILTERED ASSOCIATION
+
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_VIEW13'
+@EndUserText.label: 'CDS VIEW WITH Filtered Association'
+
+define view ZCDS_DDL_VIEW13 as 
+select from mara as A
+association to marc as _B
+on A.matnr = _B.matnr
+{
+  A.matnr,
+  A.aenam,
+  _B.dismm,
+  _B[dismm = 'PD'].werks //FILTERED ASSOCIATION
+}
+
+
+
+
+
+
+

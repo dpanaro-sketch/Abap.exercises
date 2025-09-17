@@ -1,0 +1,19 @@
+//CDS VIEW THAT CONSUMES OR RUN ON TOP OF OTHER CDS VIEW WITH INPUT PARAMETERS
+//Make sure you supply all the input parameters of the previous cds views in select query
+//if needed any result set feilds can be optional
+//You can also map the input parameters of the current one to the cds which is to be consumed
+
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_VIEW9'
+@EndUserText.label: 'CDS view that consume another CDS'
+define view ZCDS_DDL_VIEW9 
+with parameters end_range_DATE : abap.dats
+as select from ZCDS_DDL_VIEW8( ADDITIONAL_PRICE : 100,
+                               last_DATE :  $parameters.end_range_DATE )
+{
+    MATERIAL,
+   CREATION_DATE,
+   USER_NAME,
+   MRP_TYPE,
+   STANDARD_PRICE,
+   FINAL_PRICE
+}

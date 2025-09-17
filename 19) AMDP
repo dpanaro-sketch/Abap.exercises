@@ -1,0 +1,86 @@
+AMDP - ABAP Managed Database Procedures
+
+These admp will sit in application layer that passes the procedures to data base when a mapped report is called.
+
+ADT should be used for creation of these, generally these are define under a class method where it is manadate to use 
+interface 'IF_AMDP_MARKER_HDP'.
+
+AMDP class method will be a static method but it can be instantaneous even if so they acts as static method
+
+fuzzy is a search in SAP HANA used in AMDP, fuzzy(0.8) has a threshold which lies between 0 to 1 by default 0.8.
+Higher the threshould exact will be the match
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+use case - program to fetch all the matching record of the supplied item and the text supplied
+
+// Global Class
+CLASS zka_amdp_procedures1 DEFINITION PUBLIC.
+  PUBLIC SECTION.
+
+   INTERFACES : IF_AMDP_MARKER_HDB.
+   CLASS-METHODS: METH_STAT_PUB_AMDP IMPORTING
+                                                VALUE(ex_EBELP) TYPE EBELP
+                                                value(ex_TXZ01) type TXZ01
+                                        EXPORTING VALUE(im_T_EKPO) TYPE  PPMGCO_TT_EKPO.
+
+ENDCLASS.
+
+
+CLASS zka_amdp_procedures1 IMPLEMENTATION.
+
+METHOD meth_stat_pub_amdp BY DATABASE PROCEDURE
+                          FOR HDB
+                          LANGUAGE SQLSCRIPT
+                          OPTIONS READ-ONLY
+                          USING EKPO.
+
+  im_t_ekpo =    SELECT * FROM EKPO WHERE EBELP =:ex_ebelp AND
+                                      CONTAINS ( TXZ01, :ex_TXZ01, FUZZY( 0.5 ));
+
+ENDMETHOD.
+ENDCLASS.
+
+
+// Driver program
+*&---------------------------------------------------------------------*
+*& Report zka_amdp_report
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zka_amdp_report.
+PARAMETERS : p_ebelp type ebelp,
+             p_TXZ01 type TXZ01.
+             
+ START-OF-SELECTION.
+
+ zka_amdp_procedures1=>meth_stat_pub_amdp(
+   EXPORTING
+     ex_ebelp = p_ebelp
+     ex_txz01 = p_txz01
+   IMPORTING
+     im_t_ekpo  = data(lt_Data)
+
+ ).
+
+ if lt_data[] is NOT INITIAL.
+
+ try.
+ cl_Salv_table=>factory(
+   EXPORTING
+    list_display   = if_salv_c_bool_sap=>false
+   IMPORTING
+    r_salv_table   = data(lo_salv)
+   CHANGING
+     t_table        =  lt_data
+ ).
+ CATCH cx_salv_msg.
+ endtry.
+
+ if lt_data[] is NOT INITIAL.
+
+ lo_salv->display(  ).
+
+ endif.
+ endif.

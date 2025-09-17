@@ -1,0 +1,48 @@
+*&---------------------------------------------------------------------*
+*& Report zcds_report1
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zcds_report1.
+
+"Shift + Enter to retrieve all the parameters of the CDS VIEW
+"program that use CDS view to select the data instead of DDIC table
+"CDS VIEW INPUT PARAMETER CAN BE IN ANY ORDER
+"MUST USE NEW OPEN SQL STATEMENT whenever using CDS view
+
+SELECTION-SCREEN: BEGIN OF BLOCK a with frame TITLE TEXT-001.
+
+PARAMETERS : P_PRICE TYPE STPRS,
+             p_date  type datum.
+
+SELECTION-SCREEN: END OF BLOCK A.
+
+START-OF-SELECTION.
+
+"SELECT THE DATA FROM CDS VIEW
+
+SELECT *
+       FROM zcds_ddl_view8(
+            additional_price = @p_price,
+            last_date = @p_date )
+            into TABLE @data(lt_data)
+            UP TO 20 rows.
+
+
+
+"USE SALV FOR DISPLAY
+TRY.
+CL_SALV_TABLE=>factory(
+*  EXPORTING
+*    list_display   = if_salv_c_bool_sap=>false
+*    r_container    =
+*    container_name =
+  IMPORTING
+    r_salv_table   = DATA(LO_ALV)
+  CHANGING
+    t_table        = LT_DATA
+).
+CATCH cx_salv_msg.
+ENDTRY.
+
+lo_alv->display(  ).

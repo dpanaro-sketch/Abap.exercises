@@ -1,0 +1,26 @@
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_VIEW4'
+@EndUserText.label: 'Arithmetic Operations and Build in Functions'
+define view ZCDS_DDL_VIEW4 as
+select from sbook
+{
+    carrid as AIRLINE_CODE,
+    bookid as BOOKING_CODE,
+    fldate as FLIGHT_DATE,
+    loccuram as BOOKING_AMOUNT,
+    100 as ADDITIONAL_FEE,
+    ceil(loccuram + 100) as TOTAL_FEE,
+    ceil(cast(loccuram as abap.fltp) * 0.30) as DISCOUNTED_PRICE,   
+    cast (loccuram as abap.fltp) - (cast(loccuram as abap.fltp) * 0.30)  as FINAL_FEE,
+    
+    concat(carrid, bookid) as unique_code,
+    length(concat(carrid, bookid)) as length_unique_code,
+    
+    currency_conversion( amount => loccuram, 
+                         source_currency => loccurkey, 
+                         target_currency => cast('EUK' as abap.cuky( 5 )),
+                         exchange_rate_date => fldate ) as CONVERTED_EUK_CURRENCY
+                        
+                         
+}
+
+

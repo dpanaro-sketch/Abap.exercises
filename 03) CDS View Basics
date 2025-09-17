@@ -1,0 +1,46 @@
+To retrive content from your db you need sql ( Structured Query Language )
+
+SQL consits of three sub languages:
+
+1) DDL (Data Definition Language)   - Used to create database objects - create table, create view, alter table,drop table
+2) DML (Data Manipulation Language) - Used to create/edit content for the db objects - Select, insert, update and Delete
+3) DCL (Data Control Language)      - used for data integrity and data security - Grant and Revoke
+
+Classical Open SQL : SQL created for/ on top of ABAP language which supports only DML.
+
+We have multiple limitations in Opem SQL :
+1) No Right Outer Join
+2) No Union
+3) No sub queries in select 
+4) no case statement
+5) Could not use for SAP HANA features
+
+
+To Over come the above limitation we have "New Open SQL" ( Available in NETWEAVER Version >= 7.40)
+
+Classical Open SQL Example : 
+
+SELECT matnr
+       ernam
+       bistm
+       from  MARA
+       into table l_i_mara
+       where matnr in s_matnr.   ( Assumtion : l_i_mara is an standard internal table decalred already 
+                                 and s_matnr is a select option)
+
+New Open SQL Example :
+
+SELECT matnr,
+       ernam,
+       bistm
+       from  MARA
+       into table @l_i_mara
+       where matnr eq @lv_mara. ( Here @ Operator ensure those are dynamically defined at the time of run time)
+
+
+      
+
+
+
+
+

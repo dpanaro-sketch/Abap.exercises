@@ -1,0 +1,51 @@
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_VIEW6'
+@EndUserText.label: 'Views for Joins'
+
+define view ZCDS_DDL_VIEW6 as
+select from mara as A
+inner join marc as B
+
+on A.matnr = B.matnr
+
+{
+   A.matnr as material,
+   A.created_at_time as createdtime, 
+   A.aenam as USER_ID ,
+   A.bstme as TIME,
+   B.dismm as mrp_type ,
+   B.werks as PLANT
+}
+
+where B.dismm != 'PD'
+---------------------------------------------------------------------------------------------------------------------------
+
+NESTED JOINS
+
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_VIEW6'
+@EndUserText.label: 'Views for Joins'
+
+define view ZCDS_DDL_VIEW6 as
+
+select from makt as C
+left outer join
+
+( mara as A
+inner join marc as B
+on A.matnr = B.matnr)
+
+on C.matnr = A.matnr
+
+
+
+{
+   A.matnr as material,
+   A.created_at_time as createdtime, 
+   A.aenam as USER_ID ,
+   A.bstme as TIME,
+   B.dismm as mrp_type ,
+   B.werks as PLANT,
+   C.maktx as DESCRIPTION
+}
+
+where B.dismm != 'PD'
+

@@ -1,0 +1,15 @@
+//extension view to a cds view is like using append few fields in a database table
+//annotations should have append 
+//result will have feilds of first cds along with the fields extended here
+// check sql view  'ZCDS_EXT_VIEW16' this will have append and its fields
+
+
+@AbapCatalog.sqlViewAppendName: 'ZCDS_EXT_VIEW16'
+@EndUserText.label: 'Extension View'
+extend view ZCDS_DDL_VIEW15 with ZCDS_DDL_VIEW16
+association to marc as _B
+on A.matnr = _B.matnr
+{
+    _B.dismm,
+    _B.werks
+}

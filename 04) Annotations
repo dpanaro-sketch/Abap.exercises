@@ -1,0 +1,18 @@
+Annotation gives you the semantics for CDS view :
+
+types :
+1) View Annotations - Placed in front of define view statement 
+                     @AbapCatalog.sqlViewName:'ZCDS_SQL_VIEW_EXP1'
+                     @EndUserText.label:'Description for the'
+
+
+2)Element Annotations : These are for elements of select list of CDS- placed in front or after the element of cds view
+                        @Semmatics.amount.currencyCode:'local_currency_key'
+                        @Sematics.currencyCode:true
+3)Parameter Annotations : These are for parameter of the cds .placed before or after parameter
+                         @Environment.systemField:#SYSTEM_DATE
+
+4)Extension Annotations : these are for CDS view extension. placed in front of 'extend view' statement
+                         @AbapCatalog.sqlViewAppendName:'zcds_sql_ex2'
+
+5) Function Annotations : used for cds table function . placed in front of 'define table function' statement

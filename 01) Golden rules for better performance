@@ -1,0 +1,29 @@
+1) keep the result set small -> use having and where conditions whereever required
+2) Minimize the amount of data transferred  -> use select fields not select *
+3) Minimize the number of database accessing -> use joins and sub queries instead of nested select loop
+4) Minimize search overhead -> use indexes
+5) reduce the database load -> use table buffer if applicable and sort data in abap program
+
+
+Also you have other aspects like code optimization techniques:
+
+1) Avoid using Nested Loop. Still needed try using Parallel cursor technique.
+2) Use empty range table for non used primary key in your query
+3) Use data elements instead of using table name followed by field eg., Mara-matnr
+4) Prefer using binary statement wherever applicable. Make sure you sort your table before using binary search.
+5) Write the field in the same sequence as like your db table.
+6) Do code inspector and SLIN for all your development.
+7) Try using transporting no fields where ever applicable in your read table statement.
+
+
+Evolution of Hard Coding.
+-> used where ever required in your program
+-> declared in top inculde and later used where ever need
+-> declared in text elemet OR SO10 and then used 
+-> Used in TVARVC and used later ( This approach will ensure dynamic handling of those objects )
+-> Used in BRF+ ( This is the most effective approach since no need of maintainance from SAP Consultants unlike TVARVC 
+                 this can be maintained by Business user itself ).
+
+Refer., BRF + Notes for detailed explanation  on that
+
+

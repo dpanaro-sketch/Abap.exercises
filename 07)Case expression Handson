@@ -1,0 +1,56 @@
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_VIEW3'
+@EndUserText.label: 'CDS view for case expression'
+define view ZCDS_DDL_VIEW3 as
+select from ekko
+{
+    ebeln as PURCHASE_ORDER,
+    aedat as CREATION_DATE,
+    bstyp as DOCUMENT_CATEGORY,
+    bukrs as COMPANY_CODE,
+    lifnr as lifnr,
+    ktwrt as KTWRT,
+    
+    case lifnr
+    when 'USSU-VSF04'
+    then  ktwrt + 100
+    else ktwrt  
+    end as new_column
+    
+}
+
+--------------------------------------------------------------------------------------------------------------------------------------
+Nested CASE
+
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_VIEW3'
+@EndUserText.label: 'CDS view for case expression'
+define view ZCDS_DDL_VIEW3 as
+select from ekko
+{
+    ebeln as PURCHASE_ORDER,
+    aedat as CREATION_DATE,
+    bstyp as DOCUMENT_CATEGORY,
+    bukrs as COMPANY_CODE,
+    lifnr as lifnr,
+    ktwrt as KTWRT,
+    
+    case lifnr
+    when 'USSU-VSF04'
+    then  ktwrt + 100
+    else ktwrt  
+    end as new_column,
+    
+    case
+    when bstyp = 'L' and lifnr = 'USSU-VSF04'
+        then ktwrt
+    else
+        case  
+        when bstyp = 'F' and lifnr = 'USSU-VSF05' or lifnr = 'USSU-VSF06'
+            then ktwrt + 100
+        when bstyp = 'F' and lifnr = 'USSU-VSF07' or lifnr = 'USSU-VSF08'
+            then ktwrt + 200
+        else ktwrt  
+        end
+    end as new_column_2
+    
+}
+

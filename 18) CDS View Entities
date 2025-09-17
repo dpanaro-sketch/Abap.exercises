@@ -1,0 +1,166 @@
+The above seen CDS VIEWS are examples of classic CDS or DDIC CDS which can be used on version < 7.55
+
+The precedors are CDS VIEW Entities and supported on >= 7.55 version
+
+In classical cds the sql view is created on ddic but for cds entities these are created on Database itself
+
+In classical cds views we have client handling annotations but with cds entities developers need not to worry about that
+
+Current annotation for currency @sematics.currencyCode:true is not needed in cds entities
+only @sematics.amount.currencyCode: '' is needed
+
+In classical cds u can directly add a value to a currency field but not in CDS entities, you need to use functions for that
+
+1)get_numeric_value()    - for both currency and quantity
+2)curr_to_decfloat_amount() - for only currency
+
+for migration from classic cds to cds entity we can use report 'RUTDDLSV2MIGRATION'
+------------------------------------------------------------------------------------------------------------------------------
+
+We have except, union and intersect >=7.8 version
+
+except
+
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'cds view entity'
+@Metadata.ignorePropagatedAnnotations: true
+
+define view entity zcds_view_entity1 as 
+
+select from mara as a
+
+{
+    a.matnr,
+    a.aenam,
+    a.commodity
+}
+
+where matnr < '00000000000000095'
+
+except
+
+select from mara as a
+
+{
+    a.matnr,
+    a.aenam,
+    a.commodity
+}
+
+where matnr > '000000000000000140'
+
+
+-----------------------------------------------------------------------------------------------
+Inersect
+
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'cds view entity'
+@Metadata.ignorePropagatedAnnotations: true
+
+define view entity zcds_view_entity1 as 
+
+select from mara as a
+
+{
+    a.matnr,
+    a.aenam,
+    a.commodity
+}
+
+where matnr < '00000000000000095'
+
+intersect
+
+select from mara as a
+
+{
+    a.matnr,
+    a.aenam,
+    a.commodity
+}
+
+where matnr > '000000000000000140'
+
+
+---------------------------------------------------------------------------------------------------
+
+union
+
+@AbapCatalog.viewEnhancementCategory: [#NONE]
+@AccessControl.authorizationCheck: #NOT_REQUIRED
+@EndUserText.label: 'cds view entity'
+@Metadata.ignorePropagatedAnnotations: true
+
+define view entity zcds_view_entity1 as 
+
+select from mara as a
+
+{
+    a.matnr,
+    a.aenam,
+    a.commodity
+}
+
+where matnr < '00000000000000095'
+
+union 
+
+select from mara as a
+
+{
+    a.matnr,
+    a.aenam,
+    a.commodity
+}
+
+where matnr > '000000000000000140'
+
+------------------------------------------------------------------------------------
+
+Program to find CDS view or cds entites but supported on system >= 7.56 
+
+
+@Metadata.ignorePropagatedAnnotations: true
+@EndUserText.label: 'find cds view based on data element name'
+define view entity ZFIND_CDS_VIEW_ENTITY
+with parameters
+field1 : abap.char(30), // data element name
+field2 : abap.char(30), // data element name
+field3 : abap.char(30) // data element name
+
+field4 : abap.char(30) // data element name
+as select from DDCDS_ENTITY_ELEMENTS
+{
+entity_name as cds_view_entity
+}
+where data_element = $parameters.field1
+
+intersect
+
+select from DDCDS_ENTITY_ELEMENTS
+{
+entity_name as cds_view_entity
+}
+where data_element = $parameters.field2
+
+intersect
+
+select from DDCDS_ENTITY_ELEMENTS
+{
+entity_name as cds_view_entity
+}
+where data_element = $parameters.field3
+
+intersect
+
+select from DDCDS_ENTITY_ELEMENTS
+{
+entity_name as cds_view_entity
+}
+where data_element = $parameters.field4
+
+
+//input the data elements or field name
+-------------------------------------------------------------------

@@ -1,0 +1,29 @@
+1) How to find the existing cds views based on a field?
+
+create a query report in sqvl using table DD03L and ddldepdency
+choose table with join as source the  link table name with object name and add field under selection screen
+
+run your report you will get all the cds views that uses a field
+
+2) for migration from classic cds to cds entity we can use report 'RUTDDLSV2MIGRATION'
+
+3)When to use ABAP SQL, CDS views, AMDP ?
+ ABAP SQL, CDS views, and AMDP (ABAP Managed Database Procedures) are all options for accessing data in SAP systems. The choice of which to use depends on various factors such as performance, complexity, and data structure.
+
+ABAP SQL should be used when simple data retrieval or manipulation is required, and the underlying database tables or views are well-structured. ABAP SQL can be used for basic SELECT, INSERT, UPDATE, and DELETE statements, and it is suitable for simple queries that do not require complex data processing.
+
+CDS views should be used when a more complex view of data is required, and when the data needs to be accessed from multiple sources. CDS views can be used to define complex joins, unions, and aggregations, and they are optimized for performance. They are also suitable for creating reports and analytical applications.
+
+AMDP should be used in situations where complex database processing is required, and performance is a concern. For example, if you need to perform complex calculations, aggregations, or join operations on large data sets, using AMDP may be a good option.
+
+It allows database-specific functions to be accessed that do not exist in Open SQL.
+
+AMDP allows developers to write database procedures in ABAP that can be executed on the database server, rather than in the application server, which can result in improved performance.   
+
+In summary, ABAP SQL, CDS views, and AMDP all have their use cases, and the choice of which to use depends on the specific requirements of the task at hand.
+
+
+
+
+
+

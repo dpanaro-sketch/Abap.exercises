@@ -1,0 +1,79 @@
+SAP - HANA -> System Applications and Products in Data Processing -> High performance ANalytic Appliance
+
+ecc  -> data to code -> fetches data from database layer to application layer then do validations and filters
+hana -> code to data -> fetches data from database layer to application layer post validations and filters in db layer-> code push down
+
+HANA is a high performance, column oriented, in memory and relational database management system.
+
+ 
+RDBMS           -> maintain relationship between data and store them in row and column.
+In Memory       -> uses main memory so will be faster unlike traditional database
+                -> in traditional database the ram will be limited hence there will be a constant swapping of data between 
+                   appli. layer and db layer
+                 ->bottle neck - slow I/O 
+but keeping data in main memory might be costlier in real time. So HANA comes up with "Dynamic tiering"
+
+Dynamic Tiering -> Most frequently used data will be stored in main memory "Hot Data"
+                -> Less frequently accessed data will stored in disk "Warm Data" - persistent layer
+
+OLTP -> Online Transaction Processing -> Row store table      Eg, ecc or R3 system
+       Operation supported -> read wirte update modify
+OLAP -> Online Analytical   Processing -> column store table  Eg, BW (Business Warehouse)
+     Operation supoorted -> read 
+
+HANA supports both OLTP AND OLAP -> HTAP ( Hybrid Transaction / Analytical processing )
+
+
+Column oriented -> data will be stored in column unlike rows in traditional database so will be faster by giving the
+                  exact column data that matches the user query
+
+Advantages of column store table:
+1) Less memory usage
+2) Continuous sequencing of column values
+3) No indexes required
+4) Support Parallel processing
+5) Compressed Data
+
+
+When to use :
+
+1) Column store
+
+-> when table have higher number of column
+-> when u need fast search or functions like sum, aggragate,..
+-> when table is searched on few columns
+-> when compressions are required
+
+2) Column store 
+-> when application need to process one record at a time
+-> when no fast search or functions are not required
+-> when number of rows are lesser
+
+Data compression 
+1) Dictionary compression 
+2) Adavanced compression -> prefix encoding, run length coding, cluster coding, in direct encoding
+
+
+Dictionary compression
+
+-> Dictionary table column will be represented as unique colum table and later with integer key values. That will be used 
+compressed tables.
+Adavantages -> instead of using the actual table with strings the compressed table will be used with integer mapping that will
+reduce the memory significantly
+
+
+Parallel Processing
+
+-> each colum store of a table can be processed by different core, also even the same column store can be splitted and can be
+acccessed by different core. Hence more the core in sap hana landscape more the parallelisation
+
+
+
+
+
+
+
+
+
+
+

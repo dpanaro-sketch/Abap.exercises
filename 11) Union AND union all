@@ -1,0 +1,42 @@
+Both the select query should have same name else give alias name as same
+and it's data type should match
+
+---------------------------------------------------------------------------------------------------------------------------
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_VIEW7'
+@EndUserText.label: 'CDS views for Union'
+define view ZCDS_DDL_VIEW7 as 
+
+select from mara
+{
+    matnr
+}
+ 
+ where kunnr != ''
+ 
+union 
+
+select from marc
+{
+  matnr
+}
+
+-----------------------------------------------------------------------------------------------------------------------------------
+UNION ALL
+
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_VIEW7'
+@EndUserText.label: 'CDS views for Union'
+define view ZCDS_DDL_VIEW7 as 
+
+select from mara
+{
+    matnr
+}
+ 
+ where kunnr != ''
+ 
+union all
+
+select from marc
+{
+  matnr
+}

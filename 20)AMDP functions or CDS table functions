@@ -1,0 +1,87 @@
+// the amdp function should use keyword 'by database function' and will have exactly one return value
+
+// unlike amdp procedures methods, amdp function methods cannot be called directly we have to create a cds view with 
+'Table functions' that inherits 'amdp function method'
+
+
+"Global class & method for amdp functions
+CLASS zka_amdp_function DEFINITION PUBLIC.
+  PUBLIC SECTION.
+
+  INTERFACES: if_amdp_marker_hdb.
+
+  class-METHODS: meth_pub_static_amdp_function FOR TABLE FUNCTION zcds_table_function1.
+ENDCLASS.
+
+CLASS zka_amdp_function IMPLEMENTATION.
+METHOD  meth_pub_static_amdp_function BY DATABASE FUNCTION
+                                      FOR HDB
+                                      LANGUAGE SQLSCRIPT
+                                      OPTIONS READ-ONLY
+                                      using ekpo.
+
+      RETURN SELECT mandt , ebeln, ebelp, txz01 from ekpo
+                                WHERE ebelp = i_ebelp and
+                                CONTAINS (txz01, :i_text, FUZZY( 0.5 ));
+
+
+
+
+
+ENDMETHOD.
+ENDCLASS.
+-----------------------------------------------------------------------------------------------------
+
+"CDS view with Table function
+@EndUserText.label: 'CDS view with table function'
+define table function zcds_table_function1
+with parameters i_ebelp: ebelp,
+                i_text: txz01
+returns {
+  mandt :mandt;
+  ebeln :ebeln;
+  ebelp :ebelp;
+  txz01 :txz01;
+  
+}
+
+implemented by method  zka_amdp_function=>meth_pub_static_amdp_function;
+
+--------------------------------------------------------------------------------------------------
+"Driver program / report
+*&---------------------------------------------------------------------*
+*& Report zka_amdp_function_report
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zka_amdp_function_report.
+
+
+PARAMETERS :p_ebelp type ebelp,
+            p_TXZ01 type TXZ01.
+
+START-OF-SELECTION.
+
+SELECT * from zcds_table_function1( i_ebelp = @p_ebelp , i_text = @p_txz01 ) INTO TABLE @data(lt_data).
+
+if lt_Data is NOT INITIAL.
+
+try.
+cl_salv_table=>factory(
+  EXPORTING
+    list_display   = if_salv_c_bool_sap=>false
+  IMPORTING
+   r_salv_table   = data(lo_salv)
+  CHANGING
+    t_table        = lt_data
+).
+CATCH cx_salv_msg.
+ENDTRY.
+
+if lo_salv is BOUND.
+
+lo_salv->display(  ).
+
+endif.
+endif.
+----------------------------------------------------------------------------------

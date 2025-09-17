@@ -1,0 +1,25 @@
+Use alias when using aggregation functions
+
+
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_VIEW5'
+@EndUserText.label: 'CDS views for Aggregate functions'
+define view ZCDS_DDL_VIEW5 as 
+select from sbook
+{
+  carrid as BOOKING_ID,
+  loccurkey as CURRENCY,
+  count(*) as TOTAL_RECORDS,
+  count(distinct(loccuram)) as DISTINCT_PRICES,
+  min(loccuram) as MIN_PRICE,
+  max(loccuram) as MAX_PRICE,
+  avg(loccuram) as AVG_PRICE
+  
+    
+}
+
+group by 
+    carrid,
+    loccurkey
+
+having loccurkey = 'EUR'
+

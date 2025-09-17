@@ -1,0 +1,91 @@
+Abap Database Connectivity -  used to execute Native sql statement
+
+classes most used -> cl_sql_Connection for establishing connect
+                  -> cl_sql_statement -> to excute native sql 
+                  ->cl_sql_result_set -> to retrive data from native sql query
+
+
+1)native sql will not be checked by ABAP complier.
+2)CX_SQL_EXCEPTION to check if native sql statement has any error
+3)Buffer will be by passed, so it would be slow comparing open sql
+4)usage of explicit client field on where, join conditions
+5) Need to follow a logical sequence
+
+-> call method get_Connection() of class cl_sql_connection to get database connection only when secondary db is accessed
+->creation object cl_sql_statement
+->fill string variable with sql syntax
+->call method execute_query() of class cl_sql_statement to issue native sql call
+->call method set_param() or set_param_table()  of class cl_sql_Result_Set to assign target variable for result set
+->call  method next_package() of class cl_sql_result_Set to retrieve  result set
+->call  method close() of class cl_sql_result_Set to close result and release result.
+
+
+--------------------------------------------------------------------------------------
+
+*&---------------------------------------------------------------------*
+*& Report zka_adbc_report
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zka_adbc_report.
+
+DATA:LV_SQL TYPE STRING,
+     lt_ekpo type STANDARD TABLE OF ekpo,
+     lr_ekpo TYPE REF TO data.
+
+
+try.
+"Create object for class cl_sql_statement
+data(lo_sql) = new cl_sql_statement(  ).
+
+
+"Fill string variabLE with SQL statement
+
+CONCATENATE
+   `SELECT * `
+   `FROM EKPO `
+   `WHERE MANDT = '` sy-mandt `' `  "explicit client handling
+   `AND TXZ01 = '` 'Frame-500' `'`
+   INTO LV_SQL.
+
+
+"call method sql statement ->execute_query()  to issue native sql call
+data(lo_result)  = lo_sql->execute_query( lv_sql ).
+
+"call method set_param() or set_param_table() of class cl_sql_result_set to assign target variable to result set
+get REFERENCE OF lt_ekpo INTO lr_ekpo.
+
+lo_result->set_param_table(  lr_ekpo ).
+
+"call method next_package()  of class cl_sql_result_Set to retrieve result set
+lo_result->next_package( ).
+
+"call method close() of class cl_sql_result_Set to close result and release data set
+lo_result->close(  ).
+
+
+
+catch cx_sql_exception.
+ENDTRY.
+
+
+if lt_ekpo is NOT INITIAL.
+try.
+cl_Salv_table=>factory(
+ EXPORTING
+   list_display   = if_salv_c_bool_sap=>false
+*    r_container    =
+*    container_name =
+  IMPORTING
+    r_salv_table   = data(lo_Salv)
+  CHANGING
+    t_table        = lt_Ekpo
+).
+CATCH cx_salv_msg.
+ENDTRY.
+
+if lo_Salv is BOUND.
+
+lo_Salv->display( ).
+endif.
+endif.

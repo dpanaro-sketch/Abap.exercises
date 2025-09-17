@@ -1,0 +1,38 @@
+//Program for CDS VIEWs with parameters
+
+//here u can add additional charge so that if any material of mrp type 'ND' is found, the additional charge would be added
+
+//WITH PARAMETER after DEFINE VIEW is the syntax for input parameter
+//Mention the data type for the input field or use the domain and that should match with the selection field where this is to be used
+//$parameters or : is the symbols represents input Parameters
+
+@AbapCatalog.sqlViewName: 'ZCDS_SQL_VIEW8'
+@EndUserText.label: 'CDS views with input parameter'
+
+define view ZCDS_DDL_VIEW8 
+with parameters ADDITIONAL_PRICE : abap.curr( 11, 2 ),
+                @Environment.systemField: #SYSTEM_DATE
+                last_DATE : abap.dats
+as select from mara as A
+inner join marc as B
+on A.matnr = B.matnr 
+inner join mbew as C 
+on A.matnr = C.matnr
+
+
+{
+
+ A.matnr  as MATERIAL,
+ A.ersda as CREATION_DATE,
+ A.aenam  as USER_NAME,
+ B.dismm  as MRP_TYPE  ,
+ C.stprs  as STANDARD_PRICE,
+ case B.dismm
+ when 'ND' then C.stprs  + $parameters.ADDITIONAL_PRICE //:ADDITIONAL_PRICE
+ else C.stprs
+ end as FINAL_PRICE
+    
+}
+
+where A.ersda between '20121212' and :last_DATE
+and B.dismm != 'PD'

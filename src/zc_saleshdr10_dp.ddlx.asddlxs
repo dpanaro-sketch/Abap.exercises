@@ -1,0 +1,64 @@
+@Metadata.layer: #CORE
+@UI: { headerInfo: { typeNamePlural: 'Quantity of Orders',
+ title: { type:#STANDARD, value:
+'Salesorder' } } }
+
+annotate entity ZC_SALESHDR10_DP with
+{
+  @UI.facet: [{ id: 'SalesOrder',
+  purpose: #STANDARD,
+  label: 'Sales Order Header',
+  type: #IDENTIFICATION_REFERENCE,
+  position: 10
+  },
+  { id: 'SalesOrderItem',
+  purpose: #STANDARD,
+  label: 'Sales Order Items',
+  type: #LINEITEM_REFERENCE,
+  position: 20,
+  targetElement: '_SalesItem'
+  }
+  ]
+  @UI.hidden: true
+  Salesorderuuid;
+  @UI: { lineItem: [ { position: 10, label: 'Order Number', importance: #HIGH } ],
+          identification: [ { position: 10, label: 'Order Number' } ],
+          selectionField: [ { position: 10 } ] }
+  Salesorder;
+  @UI: { lineItem: [ { position: 20, label: 'Document Type', importance: #HIGH } ],
+          identification: [ { position: 20, label: 'Document Type' } ],
+          selectionField: [ { position: 20 } ] }
+  Salesordertype;
+  @UI: { lineItem: [ { position: 30, label: 'Description', importance: #LOW } ],
+  identification: [ { position: 30, label: 'Description' } ] }
+  @EndUserText.label: 'Description'
+  Description;
+  @UI: { lineItem: [ { position: 40, label: 'Organization', importance: #HIGH } ],
+          identification: [ { position: 40, label: 'Organization' } ],
+          selectionField: [ { position: 40 } ] }
+  Salesorganization;
+  @UI: { lineItem: [ { position: 50, label: 'Sold to Party', importance: #LOW } ],
+  identification: [ { position: 50, label: 'Sold to Party' } ] }
+  Soldtoparty;
+  @UI: { lineItem: [ { position: 60, label: 'Dist.Channel', importance: #LOW } ],
+  identification: [ { position: 60, label: 'Dist.Channel' } ] }
+  Distributionchannel;
+  @UI: { lineItem: [ { position: 70, label: 'Reason', importance: #LOW } ],
+  identification: [ { position: 70, label: 'Reason' } ] }
+  Documentreason;
+  @UI: { lineItem: [ { position: 80, label: 'Net Amount', importance: #LOW } ],
+  identification: [ { position: 80, label: 'Net Amount' } ] }
+  Totalnetamount;
+  @UI.hidden: true
+  Transactioncurrency;
+  @UI.hidden: true
+  Createdbyuser;
+  @UI.hidden: true
+  Creationat;
+  @UI.hidden: true
+  Lastchangedbyuser;
+  @UI.hidden: true
+  Lastchangedat;
+  @UI.hidden: true
+  Locallastchangedat;
+}

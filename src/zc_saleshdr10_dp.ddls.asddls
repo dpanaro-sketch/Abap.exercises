@@ -10,12 +10,14 @@ define root view entity ZC_SALESHDR10_DP
   key Salesorderuuid,
       @Search.defaultSearchElement: true
       Salesorder,
+      @Search.defaultSearchElement: true
       Salesordertype,
       Description,
       @Search.defaultSearchElement: true
       Salesorganization,
       @Search.defaultSearchElement: true
       Soldtoparty,
+      @Search.defaultSearchElement: true
       Distributionchannel,
       Documentreason,
       @Semantics.amount.currencyCode: 'Transactioncurrency'

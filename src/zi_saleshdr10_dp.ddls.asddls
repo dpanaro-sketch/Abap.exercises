@@ -3,7 +3,7 @@
 @Metadata.ignorePropagatedAnnotations: true
 define root view entity ZI_SalesHdr10_DP
   as select from zsaleshdr10_dp
-   composition [0..*] of ZI_SalesItem10_DP as _SalesItem
+  composition [0..*] of ZI_SalesItem10_DP as _SalesItem
 {
   key salesorderuuid      as Salesorderuuid,
       salesorder          as Salesorder,
@@ -16,6 +16,7 @@ define root view entity ZI_SalesHdr10_DP
       @Semantics.amount.currencyCode: 'Transactioncurrency'
       totalnetamount      as Totalnetamount,
       transactioncurrency as Transactioncurrency,
+      status              as Status,
       @Semantics.user.createdBy: true
       createdbyuser       as Createdbyuser,
       @Semantics.systemDateTime.createdAt: true
@@ -26,6 +27,6 @@ define root view entity ZI_SalesHdr10_DP
       lastchangedat       as Lastchangedat,
       @Semantics.systemDateTime.localInstanceLastChangedAt: true
       locallastchangedat  as Locallastchangedat,
-      
+
       _SalesItem // Exposed Associations
 }

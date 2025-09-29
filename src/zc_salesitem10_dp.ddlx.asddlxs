@@ -15,14 +15,17 @@ annotate entity ZC_SALESITEM10_DP with
   @UI: { lineItem: [ { position: 10, label: 'Item Number', importance: #HIGH } ],
          identification: [ { position: 10, label: 'Item Number' } ] }
   Salesorderitem;
-  @UI.lineItem: [{ position:20 }]
+   @UI: { lineItem: [ { position: 20, label: 'Category', importance: #HIGH } ],
+         identification: [ { position: 20, label: 'Category' } ] }
   Salesorderitemcategory;
-  @UI.lineItem: [{ position:30 }]
+  @UI: { lineItem: [ { position: 30, label: 'Description', importance: #HIGH } ],
+         identification: [ { position: 30, label: 'Description' } ] }
   Salesorderitemtext;
   @UI: { lineItem: [ { position: 40, label: 'Material', importance: #HIGH } ],
          identification: [ { position: 40, label: 'Material' } ] }
   Material;
-  @UI.lineItem: [{ position:50 }]
+  @UI: { lineItem: [ { position: 50, label: 'Plant', importance: #HIGH } ],
+         identification: [ { position: 50, label: 'Plant' } ] }
   Plant;
   @UI: { lineItem: [ { position: 60, label: 'Quantity', importance: #HIGH } ],
          identification: [ { position: 60, label: 'Quantity' } ] }

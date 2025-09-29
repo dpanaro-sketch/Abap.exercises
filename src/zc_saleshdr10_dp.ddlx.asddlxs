@@ -51,6 +51,11 @@ annotate entity ZC_SALESHDR10_DP with
   Totalnetamount;
   @UI.hidden: true
   Transactioncurrency;
+  @UI: { lineItem: [ { position: 100 },
+                     { type: #FOR_ACTION, dataAction: 'setComplete', label: 'Set Complete' } ],
+  identification: [ { position: 100},
+                    { type: #FOR_ACTION, dataAction: 'setComplete', label: 'Set Complete'  } ] }
+  Status;
   @UI.hidden: true
   Createdbyuser;
   @UI.hidden: true

@@ -23,6 +23,7 @@ define root view entity ZC_SALESHDR10_DP
       @Semantics.amount.currencyCode: 'Transactioncurrency'
       Totalnetamount,
       Transactioncurrency,
+      Status,
       Createdbyuser,
       Creationat,
       Lastchangedbyuser,

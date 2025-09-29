@@ -1,0 +1,79 @@
+managed implementation in class zbp_i_saleshdr10_dp unique;
+//strict ( 2 );
+with draft;
+
+define behavior for ZI_SalesHdr10_DP alias SalesHdr
+persistent table zsaleshdr10_dp
+draft table zdsaleshdr10_dp
+lock master total etag Lastchangedat
+//authorization master ( instance )
+etag master Locallastchangedat
+{
+  create;
+  update;
+  delete;
+  association _SalesItem { create; with draft; }
+  field ( numbering : managed, readonly ) Salesorderuuid;
+  field ( readonly ) Salesorder, Status;
+
+  determination calcSalesOrderId on save { create; }
+
+  action (features : instance ) setComplete result [1] $self;
+
+  mapping for zsaleshdr10_dp
+    {
+      Salesorderuuid      = salesorderuuid;
+      Salesorder          = salesorder;
+      Salesordertype      = salesordertype;
+      Description         = description;
+      Soldtoparty         = soldtoparty;
+      Salesorganization   = salesorganization;
+      Distributionchannel = distributionchannel;
+      Documentreason      = documentreason;
+      Totalnetamount      = totalnetamount;
+      Status              = status;
+      Transactioncurrency = transactioncurrency;
+      Createdbyuser       = createdbyuser;
+      Creationat          = creationat;
+      Lastchangedbyuser   = lastchangedbyuser;
+      Lastchangedat       = lastchangedat;
+      Locallastchangedat  = locallastchangedat;
+    }
+}
+
+
+define behavior for ZI_SalesItem10_DP alias SalesItem
+persistent table zsalesitem10_dp
+draft table zdsalesitem10_dp
+lock dependent by _SalesHdr
+//authorization dependent by _SalesHdr
+etag master Locallastchangedat
+{
+  update;
+  delete;
+  field ( readonly ) Salesorderuuid;
+  field ( numbering : managed, readonly ) Salesitemuuid;
+  association _SalesHdr { with draft; }
+
+  validation validatePlant on save { field Plant; create;}
+
+  mapping for zsalesitem10_dp
+    {
+      Salesitemuuid          = salesitemuuid;
+      Salesorderuuid         = salesorderuuid;
+      Salesorderitem         = salesorderitem;
+      Salesorderitemcategory = salesorderitemcategory;
+      Salesorderitemtext     = salesorderitemtext;
+      Material               = material;
+      Plant                  = plant;
+      Orderquantity          = orderquantity;
+      Orderquantityunit      = orderquantityunit;
+      Netamount              = netamount;
+      Transactioncurrency    = transactioncurrency;
+      Createdbyuser          = createdbyuser;
+      Creationat             = creationat;
+      Lastchangedbyuser      = lastchangedbyuser;
+      Lastchangedat          = lastchangedat;
+      Locallastchangedat     = locallastchangedat;
+    }
+}
